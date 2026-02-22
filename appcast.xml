@@ -8,7 +8,7 @@
             <sparkle:version>00005</sparkle:version>
             <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://jacksonvil-s.github.io/calendar-reminder/releases/download/v0.2.1/calendarReminder-v0.2.1.zip" length="2854021" type="application/octet-stream" sparkle:edSignature="jkfDlfUd8/vT/UbkcOrX6yGl7f7V7MwIx0+zqpWeoXq8HNwfIsc9/ELiofgiCGKwvNBNuA5E/dJDkR7dofgOCA=="/>
+            <enclosure url="https://github.com/jacksonvil-s/calendar-reminder/releases/download/v0.2.1/calendarReminder-v0.2.1.zip" length="2854021" type="application/octet-stream" sparkle:edSignature="jkfDlfUd8/vT/UbkcOrX6yGl7f7V7MwIx0+zqpWeoXq8HNwfIsc9/ELiofgiCGKwvNBNuA5E/dJDkR7dofgOCA=="/>
         </item>
         <item>
             <title>0.2.0</title>
