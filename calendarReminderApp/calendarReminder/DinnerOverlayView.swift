@@ -21,6 +21,9 @@ import AppKit
 
 struct DinnerOverlayView: View {
     
+    //Settings
+    @AppStorage("BackgroundColour") private var backgroundColour:String = "white"
+    
     //Events
     let onDismiss: () -> Void
     
@@ -29,32 +32,56 @@ struct DinnerOverlayView: View {
     let timeRangeText: String
     let place: String
     
+        private var backgroundColor: Color {
+            let colorMap: [String: Color] = [
+                "red": .red, "orange": .orange, "yellow": .yellow,
+                "green": .green, "blue": .blue, "indigo": .indigo,
+                "purple": .purple, "black": .black, "white": .white, "gray": .gray
+            ]
+            return colorMap[backgroundColour.lowercased()] ?? .white
+        }
+
+        private var foregroundColor: Color {
+            let nsColor = NSColor(backgroundColor)
+            
+            var luminance:Double = 0.0
+            
+            if let rgbColor = nsColor.usingColorSpace(.sRGB) {
+                    luminance = (0.299 * rgbColor.redComponent) +
+                                    (0.587 * rgbColor.greenComponent) +
+                                    (0.114 * rgbColor.blueComponent)
+                }
+            
+            return luminance > 0.5 ? .black : .white
+        }
+    
     var body: some View {
         ZStack {
-            Color.green
+            backgroundColor
             VStack {
                 Text ("TIME FOR YOUR CALENDAR EVENT!")
                     .font(.system(size: 70, weight: .heavy))
                     .minimumScaleFactor(0.3)
                     .lineLimit(2)
-                    .foregroundColor(.yellow)
+                    .foregroundColor(foregroundColor)
                     .padding(10)
                     .accessibilityAddTraits(.isHeader)
                 Text("Your event '\(title)' between \(timeRangeText) at \(place) will be starting soon.")
                     .font(.system(size: 20, weight: .semibold))
                     .minimumScaleFactor(0.2)
                     .lineLimit(2)
-                    .foregroundStyle(.white)
+                    .foregroundColor(foregroundColor)
                     .padding(5)
                 Button ("Dismiss") {
                     print("Dismiss button tapped")
                     onDismiss()
                 }
-                .font(.title)
+                .controlSize(.extraLarge)
+                .font(.system(size: 50, weight: .bold))
                 .padding(10)
                 .buttonStyle(.glassProminent)
-                .tint(.white)
-                .foregroundStyle(.green)
+                .tint(backgroundColor)
+                .foregroundStyle(foregroundColor)
             }
             .padding(24)
             .frame(alignment: .center)

@@ -26,6 +26,8 @@ import EventKit
 class CalendarPollingController {
     
     //Variables
+    @AppStorage("Frequency") private var frequency:Double = 60
+    
     let eventStore = EKEventStore()
     var timer: Timer?
     var panel: NSPanel?
@@ -137,7 +139,7 @@ class CalendarPollingController {
         print ("Starting 60s polling...")
         self.pollNow()
         print ("First poll success...")
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) {[weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) {[weak self] _ in
             print("Polling...")
             self?.pollNow()
             print ("Timer fired")
