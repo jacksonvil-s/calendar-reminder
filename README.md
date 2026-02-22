@@ -24,11 +24,18 @@ If the app still does not work, please first check for calendar permissions. If 
 To enable, first go into system settings, privacy and security, then full calendar access. Then enable the switch on calendar reminder.
 The app is fully open source! If you don't trust the app, then go into the xcodeproj, then build from source yourself!
 
-# Note
+# Quitting the app and updating
 App versions above 0.2.0 can use the menu bar to quit the app. To update the app, enter settings then check for updates. Updates should then be installed properly.
 
 For app version below 0.1.2 (including 0.1.2) can use the dock to quit the app, and use the menu bar > calendar reminder to update the app.
 App version 0.1.1 does not have properly functioning updater. In this case, please download the latest version from releases and replace the old app.
+
+# Features planned for the future
+- Customisation of menu bar icon
+- Calendar events will only remind you once per session
+- Better UI
+- Optimisation of scripts
+- More coming soon when I have the idea...
 
 # Copyright notice
 
