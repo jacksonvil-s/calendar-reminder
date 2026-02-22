@@ -281,7 +281,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00003;
+				CURRENT_PROJECT_VERSION = 00004;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -296,6 +296,8 @@
 				INFOPLIST_FILE = calendarReminder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Calendar Reminder";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "We need this access in order to provide the full app. We connect to the calendar and display alerts in front of you.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "We need this access in order to provide the full app. We connect to the calendar and display alerts in front of you.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "This software is licensed under the Apache-2.0 license. Copyright Jacksonvil 2026.";
@@ -304,7 +306,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonvil.calendarReminder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -333,7 +335,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00003;
+				CURRENT_PROJECT_VERSION = 00004;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -348,6 +350,8 @@
 				INFOPLIST_FILE = calendarReminder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Calendar Reminder";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "We need this access in order to provide the full app. We connect to the calendar and display alerts in front of you.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "We need this access in order to provide the full app. We connect to the calendar and display alerts in front of you.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "This software is licensed under the Apache-2.0 license. Copyright Jacksonvil 2026.";
@@ -356,7 +360,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonvil.calendarReminder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

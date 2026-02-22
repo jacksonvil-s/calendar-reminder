@@ -23,13 +23,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.2</string>
+	<string>0.2.0</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>00003</string>
+	<string>00004</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -48,8 +48,12 @@
 	<string>17C52</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
+	<key>LSBackgroundOnly</key>
+	<true/>
 	<key>LSMinimumSystemVersion</key>
 	<string>26.0</string>
+	<key>LSUIElement</key>
+	<true/>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>We need this access in order to provide the full app. We connect to the calendar and display alerts in front of you.</string>
 	<key>NSCalendarsUsageDescription</key>

@@ -23,11 +23,11 @@ import SwiftUI
 import AppKit
 import EventKit
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class CalendarPollingController {
     
     //Variables
     let eventStore = EKEventStore()
-    var timer :Timer?
+    var timer: Timer?
     var panel: NSPanel?
     
     func formatTimeRange(start: Date, end: Date) -> String {
@@ -117,7 +117,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let events = eventStore.events(matching: Predicate)
             
             print("Found calendar named Calendar Reminder")
-            print("Events: \(events)")
             
             for event in events {
                 if event.startDate <= now && event.endDate > now {
@@ -138,7 +137,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print ("Starting 60s polling...")
         self.pollNow()
         print ("First poll success...")
-        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) {[weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) {[weak self] _ in
             print("Polling...")
             self?.pollNow()
             print ("Timer fired")
@@ -163,17 +162,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        requestCalendarAccess {granted in
+    
+    func start() {
+        print ("Starting... please wait")
+        
+        requestCalendarAccess { [weak self] granted in
+            guard let self = self else {return}
+            
             if granted {
-                print ("Successfully granted permission")
+                print ("Successfully granted permission. Now loading up timer..")
                 
-                
-                self.startPolling()
-            }
-            else {
-                print ("Permission failed.")
+                DispatchQueue.main.async {
+                    self.startPolling()
+                }
+            } else {
+                print ("Permission failed. Please try again.")
             }
         }
     }
+    
+    func stop() {
+        print ("Stopping... please wait")
+        timer?.invalidate()
+        timer = nil
+    }
+    
 }

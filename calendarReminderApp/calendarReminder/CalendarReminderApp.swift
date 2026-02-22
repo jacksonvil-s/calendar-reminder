@@ -21,7 +21,7 @@ import Sparkle
 
 @main
 struct calendarReminderApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate: AppDelegate
+    @NSApplicationDelegateAdaptor(StatusItemController.self) var appDelegate: StatusItemController
     
     private let updatorController: SPUStandardUpdaterController
     
@@ -49,4 +49,3 @@ struct calendarReminderApp: App {
         }
     }
 }
-

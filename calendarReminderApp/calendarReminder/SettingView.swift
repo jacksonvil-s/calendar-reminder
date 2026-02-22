@@ -15,16 +15,40 @@ import LaunchAtLogin
 import Sparkle
 
 struct SettingView: View {
+    
+    let updatorController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    
     @State private var soundSetting: Bool = false
-
+    
     var body: some View {
-        Form {
-            LaunchAtLogin.Toggle()
-            Toggle("Sounds", isOn: $soundSetting)
+        VStack {
+            Form {
+                Link("Check out the Github repo!", destination: URL(string: "https://github.com/jacksonvil-s/calendar-reminder/tree/main")!)
+                    .font(.headline)
+            }
+            .formStyle(.grouped)
+            
+            Form {
+                Text("Updates")
+                    .font(.headline)
+                Button("Check for updates...") {
+                    updatorController.checkForUpdates(nil)
+                }
+            }
+            .toggleStyle(.switch)
+            .formStyle(.grouped)
+            .buttonStyle(.glassProminent)
+            
+            Form {
+                Text("General")
+                    .font(.headline)
+                LaunchAtLogin.Toggle()
+                Toggle("Sounds", isOn: $soundSetting)
+            }
+            .toggleStyle(.switch)
+            .formStyle(.grouped)
         }
-        .toggleStyle(.switch)
-        .formStyle(.grouped)
-        .padding()
+        .padding(3)
     }
 }
 
