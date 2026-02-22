@@ -23,13 +23,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.1</string>
+	<string>0.1.2</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>00002</string>
+	<string>00003</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -57,7 +57,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>This software is licensed under the Apache-2.0 license. Copyright Jacksonvil 2026.</string>
 	<key>SUFeedURL</key>
-	<string>https://jacksonvil-s.github.io/repo/calendar-reminder/appcast.xml</string>
+	<string>https://jacksonvil-s.github.io/calendar-reminder/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>KpMuRDH36XDggzCokiJ6oGtHeK7gTJxCuUwSFklMnJ0=</string>
 </dict>

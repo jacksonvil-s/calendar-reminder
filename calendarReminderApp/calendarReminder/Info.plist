@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>SUFeedURL</key>
-	<string>https://jacksonvil-s.github.io/repo/calendar-reminder/appcast.xml</string>
+	<string>https://jacksonvil-s.github.io/calendar-reminder/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>KpMuRDH36XDggzCokiJ6oGtHeK7gTJxCuUwSFklMnJ0=</string>
 </dict>
