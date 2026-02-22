@@ -30,6 +30,8 @@ App versions above 0.2.0 can use the menu bar to quit the app. To update the app
 For app version below 0.1.2 (including 0.1.2) can use the dock to quit the app, and use the menu bar > calendar reminder to update the app.
 App version 0.1.1 does not have properly functioning updater. In this case, please download the latest version from releases and replace the old app.
 
+# Copyright notice
+
    Copyright 2026 Jacksonvil
 
    Licensed under the Apache License, Version 2.0 (the "License");
