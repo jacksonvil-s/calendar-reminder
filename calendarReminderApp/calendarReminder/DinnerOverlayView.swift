@@ -79,7 +79,7 @@ struct DinnerOverlayView: View {
                 .controlSize(.extraLarge)
                 .font(.system(size: 50, weight: .bold))
                 .padding(10)
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.borderedProminent)
                 .tint(backgroundColor)
                 .foregroundStyle(foregroundColor)
             }

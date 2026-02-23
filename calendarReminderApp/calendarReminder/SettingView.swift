@@ -95,7 +95,7 @@ struct SettingView: View {
             
         }
         .frame(minWidth: 450, minHeight: 300)
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.borderedProminent)
         .toggleStyle(.switch)
         .formStyle(.grouped)
         .padding(20)
