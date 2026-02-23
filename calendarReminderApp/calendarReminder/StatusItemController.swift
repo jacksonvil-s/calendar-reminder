@@ -44,11 +44,14 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
     
     private func buildMenu() -> NSMenu {
         let menu = NSMenu()
+        
         //menu.addItem(NSMenuItem(title: "Open", action: #selector(openAction), keyEquivalent: ""))
-        //menu.addItem(NSMenuItem.separator())
+        
         let settingsItem = NSMenuItem(title: "Settings", action: #selector(settings(_:)), keyEquivalent: ",")
         settingsItem.target = self
         menu.addItem(settingsItem)
+        
+        menu.addItem(NSMenuItem.separator())
         
         let quitItem = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self

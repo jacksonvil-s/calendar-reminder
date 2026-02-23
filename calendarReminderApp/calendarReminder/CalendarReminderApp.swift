@@ -27,6 +27,7 @@ struct calendarReminderApp: App {
     
     init() {
         print("Initialising...")
+        print("Running version \(Bundle.main.fullVersion)")
         
         updatorController = SPUStandardUpdaterController(
             startingUpdater: true,
