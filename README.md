@@ -3,6 +3,8 @@
 # calendar-reminder
 A utility to remind you when a calendar event is coming up.
 
+This project was oringinally inspired by a few other paid apps. I decided to make my own version of it. Obviously this app lacks a lot of polish but overtime I will try to make it as customisable and polished as possible. This app may never reach the quality of the paid apps, but one day it might, with your contributions on finding issues and improving upon them!
+
 # How to use
 First, create a calendar in your calendar app named Calendar Reminder exactly - note the space and the capitals. Create events using this calendar. Then, when the time comes, the app will automatically notify you with an onscreen popup.
 
@@ -27,6 +29,11 @@ The app is fully open source! If you don't trust the app, then go into the xcode
 If after all the solutions above the app still does not work please kindly file an issue report on the repo. Thank you for your support.
 
 # Quitting the app and updating
+## Finding your app version
+If you cannot see an app icon in the dock - go to menu the menu bar, find the calendar reminder icon, then click settings. Then click info in the tab bar and you will find the version number there.
+
+If you can see an app icon in the dock - go to menu bar, click the calendar reminder name, then click info. The version number will be shown there.
+
 ## App versions 0.2.3 and above
 Use the menu bar icon to quit the app.
 To update the app, enter settings, go into the updates tab then click check for updates. The updator should then guide you to update to the latest version.
