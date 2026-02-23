@@ -24,11 +24,23 @@ If the app still does not work, please first check for calendar permissions. If 
 To enable, first go into system settings, privacy and security, then full calendar access. Then enable the switch on calendar reminder.
 The app is fully open source! If you don't trust the app, then go into the xcodeproj, then build from source yourself!
 
-# Quitting the app and updating
-App versions above 0.2.0 can use the menu bar to quit the app. To update the app, enter settings then check for updates. Updates should then be installed properly.
+If after all the solutions above the app still does not work please kindly file an issue report on the repo. Thank you for your support.
 
-For app version below 0.1.2 (including 0.1.2) can use the dock to quit the app, and use the menu bar > calendar reminder to update the app.
-App version 0.1.1 does not have properly functioning updater. In this case, please download the latest version from releases and replace the old app.
+# Quitting the app and updating
+## App versions 0.2.3 and above
+Use the menu bar icon to quit the app.
+To update the app, enter settings, go into the updates tab then click check for updates. The updator should then guide you to update to the latest version.
+
+## App versions 0.2.0 to 0.2.2
+Use the menu bar icon to quit the app. 
+To update the app, enter settings, general, then check for updates. Updates should then be installed properly.
+
+## App version below 0.1.2 (including 0.1.2)
+Use the dock to quit the app.
+Use the menu bar > calendar reminder to update the app.
+
+## App version 0.1.1 
+This version does not have properly functioning updater. In this case, please download the latest version from releases and replace the old app.
 
 # Features planned for the future
 - Customisation of menu bar icon
@@ -36,6 +48,8 @@ App version 0.1.1 does not have properly functioning updater. In this case, plea
 - Better UI
 - Optimisation of scripts
 - More coming soon when I have the idea...
+
+These features will come over the following weeks. Big releases will come over weekends. Please stayed tuned.
 
 # Copyright notice
 
