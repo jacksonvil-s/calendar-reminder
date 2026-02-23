@@ -20,6 +20,8 @@
 
 import Foundation
 
+let osVer = ProcessInfo.processInfo.operatingSystemVersion
+
 extension Bundle {
     var appVersion: String {
         infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
@@ -27,6 +29,10 @@ extension Bundle {
     
     var buildNumber: String {
         infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    }
+    
+    var OSver: String {
+        "\(osVer.majorVersion).\(osVer.minorVersion).\(osVer.patchVersion)"
     }
     
     var fullVersion: String {

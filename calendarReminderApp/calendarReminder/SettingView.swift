@@ -18,24 +18,35 @@ struct SettingView: View {
     
     let updatorController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
     
-    @AppStorage("EnableSound") private var soundSetting: Bool = false
+    @AppStorage("EnableSound") private var soundSetting: Bool = true
+    @AppStorage("EnableAnimation") private var animationSetting: Bool = true
     @AppStorage("BackgroundColour") private var backgroundColour:String = "white"
     @AppStorage("Frequency") private var frequency:Double = 60.0
     
     var body: some View {
         
         TabView {
-            //General
-            Tab("General", systemImage: "gearshape" ) {
+            Tab("General", systemImage: "gear" ) {
                 Form {
                     Section (header: Text("General")) {
                         LaunchAtLogin.Toggle()
                         Toggle(isOn: $soundSetting) {
                             Label("Sounds", systemImage:"speaker.wave.2.fill")
                         }
+                        Toggle(isOn: $animationSetting) {
+                            Label("Animations and Effects", systemImage: "dot.radiowaves.left.and.right")
+                        }
                     }
                     
                     Section (header: Text("Updates")) {
+                        LabeledContent("Notice to users", value: "Updates has moved to its own dedicated section. \nPlease move to the new tab in order to perform updates.")
+                    }
+                }
+            }
+            
+            Tab ("Updates", systemImage: "arrow.trianglehead.2.clockwise.rotate.90") {
+                Form {
+                    Section (header: Text("Keep the app on the latest version"), footer: Text("Updates are powered by Sparkle")) {
                         Button("Check for updates...") {
                             updatorController.checkForUpdates(nil)
                         }
@@ -83,17 +94,17 @@ struct SettingView: View {
                         
                         LabeledContent("App version", value: "v\(Bundle.main.appVersion)")
                         LabeledContent("Build number", value: "Build \(Bundle.main.buildNumber) (universal x64/arm64)")
-                        LabeledContent("Settings version", value: "v1.0")
+                        LabeledContent("Current OS", value: "Running macOS \(Bundle.main.OSver)")
+                        LabeledContent("Settings version", value: "v1.1")
                         
                         Link(destination: URL(string: "https://github.com/jacksonvil-s/calendar-reminder/tree/main")!) {
                             Label("Check out the Github repo!", systemImage: "network")
                         }
                         
-                        Text("If you like this project, consider giving the repo a star! I thank you in advance.")
+                        LabeledContent("Message from the creator", value: "If you like this project, consider giving the repo a star! I thank you in advance.")
                     }
                 }
             }
-            
         }
         .frame(minWidth: 450, minHeight: 300)
         .buttonStyle(.borderedProminent)

@@ -23,6 +23,8 @@ struct DinnerOverlayView: View {
     
     //Settings
     @AppStorage("BackgroundColour") private var backgroundColour:String = "white"
+    @AppStorage("EnableSound") private var soundOn:Bool = true
+    @AppStorage("EnableAnimation") private var animationOn:Bool = true
     
     //Events
     let onDismiss: () -> Void
