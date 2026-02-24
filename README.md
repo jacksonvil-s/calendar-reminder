@@ -53,8 +53,8 @@ Use the menu bar > calendar reminder to update the app.
 This version does not have properly functioning updater. In this case, please download the latest version from releases and replace the old app.
 
 # Features planned for the future
-- Customisation of menu bar icon
-- Calendar events will only remind you once per session
+- ~~Customisation of menu bar icon~~ Done!
+- ~~Calendar events will only remind you once per session~~ Done!
 - Better UI
 - Optimisation of scripts
 - More coming soon when I have the idea...
