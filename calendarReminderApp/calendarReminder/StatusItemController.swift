@@ -23,6 +23,8 @@ import AppKit
 
 final class StatusItemController: NSObject, NSApplicationDelegate {
     
+    @AppStorage("MenuBarIcon") private var menuBarIcon:String = "calendar.badge"
+    
     private var statusItem: NSStatusItem?
     private var timerCoordinator = CalendarPollingController()
     private var settingsWC: NSWindowController?
@@ -30,7 +32,7 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification:Notification) {
         //Originally init; creating status items in menu bar
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.image = NSImage(systemSymbolName: "calendar.badge", accessibilityDescription: "Calendar Reminder menu bar icon")
+        item.button?.image = NSImage(systemSymbolName: menuBarIcon, accessibilityDescription: "Calendar Reminder menu bar icon")
         item.menu = buildMenu()
         self.statusItem = item
         
@@ -75,7 +77,7 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
         let window = NSWindow(contentViewController: hosting)
         window.title = "Settings"
         window.styleMask = [.titled, .closable, .miniaturizable]
-        window.setContentSize(NSSize(width: 520, height: 420))
+        window.setContentSize(NSSize(width: 800, height: 500))
         window.center()
         
         let wc = NSWindowController(window: window)
@@ -85,7 +87,33 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
     }
     
     @objc private func quit() {
-        NSApp.terminate(nil)
+        let alert = NSAlert()
+        alert.messageText = "Are you sure you want to quit?"
+        alert.informativeText = "Any ongoing actions will be stopped. You will not be reminded while the app is quit."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Quit")
+        alert.addButton(withTitle: "Cancel")
+
+        // Prefer presenting from the settings window if visible, else as app-modal
+        if let window = settingsWC?.window, window.isVisible {
+            alert.beginSheetModal(for: window) { response in
+                if response == .alertFirstButtonReturn { // Quit
+                    NSApp.terminate(nil)
+                }
+            }
+        } else if let mainWindow = NSApp.keyWindow ?? NSApp.mainWindow {
+            alert.beginSheetModal(for: mainWindow) { response in
+                if response == .alertFirstButtonReturn {
+                    NSApp.terminate(nil)
+                }
+            }
+        } else {
+            // Fall back to a synchronous modal if no window is available
+            let response = alert.runModal()
+            if response == .alertFirstButtonReturn {
+                NSApp.terminate(nil)
+            }
+        }
     }
     
 }

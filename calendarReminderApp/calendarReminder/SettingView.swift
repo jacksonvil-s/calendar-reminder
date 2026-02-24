@@ -22,6 +22,9 @@ struct SettingView: View {
     @AppStorage("EnableAnimation") private var animationSetting: Bool = true
     @AppStorage("BackgroundColour") private var backgroundColour:String = "white"
     @AppStorage("Frequency") private var frequency:Double = 60.0
+    @AppStorage("MenuBarIcon") private var menuBarIcon:String = "calendar.badge"
+    
+    @State private var showQuitConfirmation = false
     
     var body: some View {
         
@@ -34,12 +37,25 @@ struct SettingView: View {
                             Label("Sounds", systemImage:"speaker.wave.2.fill")
                         }
                         Toggle(isOn: $animationSetting) {
-                            Label("Animations and Effects", systemImage: "dot.radiowaves.left.and.right")
+                            Label("Animations and Effects", systemImage: "sensor.radiowaves.left.and.right.fill")
                         }
                     }
                     
-                    Section (header: Text("Updates")) {
-                        LabeledContent("Notice to users", value: "Updates has moved to its own dedicated section. \nPlease move to the new tab in order to perform updates.")
+                    Section (header: Text("App control")) {
+                        Button("Quit app", systemImage: "rectangle.portrait.and.arrow.forward.fill") {
+                            showQuitConfirmation = true
+                        }
+                        .confirmationDialog("Are you sure you want to quit?", isPresented: $showQuitConfirmation, titleVisibility: .visible) {
+                            
+                            Button("Continue (quit)", role: .destructive) {
+                                print ("Closing app from settings...")
+                                NSApp.terminate(nil)
+                            }
+                            Button("Cancel", role: .cancel) {}
+                        } message: {
+                            Text("Any ongoing actions will be stopped. You will not be reminded while the app is quit. If you wanted to close settings instead, use the window controls.")
+                        }
+                        
                     }
                 }
             }
@@ -82,7 +98,21 @@ struct SettingView: View {
                             Text("Long (90 sec)").tag(90.0)
                             Text("Ultra-long (120 sec)").tag(120.0)
                         }
-                        
+                    }
+                    
+                    Section(header:Text("Menu bar")) {
+                        Picker("Menu bar icon", selection: $menuBarIcon) {
+                            Text("Changes here require an app restart.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .disabled(true)
+                            Divider()
+                            Label("Calendar with badge (default)", systemImage: "calendar.badge").tag("calendar.badge")
+                            Label("Calendar in circle", systemImage: "calendar.circle").tag("calendar.circle")
+                            Label("Calendar with exclaimation mark", systemImage: "calendar.badge.exclamationmark").tag("calendar.badge.exclamationmark")
+                            Label("Calendar with clock", systemImage: "calendar.badge.clock").tag("calendar.badge.clock")
+                            Label("Timeline", systemImage: "calendar.day.timeline.right").tag("calendar.day.timeline.right")
+                        }
                     }
                     
                 }
@@ -94,23 +124,31 @@ struct SettingView: View {
                         
                         LabeledContent("App version", value: "v\(Bundle.main.appVersion)")
                         LabeledContent("Build number", value: "Build \(Bundle.main.buildNumber) (universal x64/arm64)")
-                        LabeledContent("Current OS", value: "Running macOS \(Bundle.main.OSver)")
-                        LabeledContent("Settings version", value: "v1.1")
+                        LabeledContent("Settings version", value: "v1.2")
                         
-                        Link(destination: URL(string: "https://github.com/jacksonvil-s/calendar-reminder/tree/main")!) {
-                            Label("Check out the Github repo!", systemImage: "network")
+                        LabeledContent("Check out the Github repo!") {
+                            Link(destination: URL(string: "https://github.com/jacksonvil-s/calendar-reminder/tree/main")!) {
+                                Label("Access via web", systemImage: "network")
+                            }
                         }
                         
                         LabeledContent("Message from the creator", value: "If you like this project, consider giving the repo a star! I thank you in advance.")
+                        
+                        LabeledContent("Quit without dialog warning") {
+                            Button("Quit", systemImage: "xmark.bin") {
+                                NSApp.terminate(nil)
+                            }
+                        }
                     }
                 }
             }
         }
-        .frame(minWidth: 450, minHeight: 300)
+        .frame(minWidth: 650, minHeight: 500)
         .buttonStyle(.borderedProminent)
         .toggleStyle(.switch)
         .formStyle(.grouped)
-        .padding(20)
+        .padding(.horizontal, 5)
+        .padding(.vertical, 20)
         .tabViewStyle(.sidebarAdaptable)
     }
 }

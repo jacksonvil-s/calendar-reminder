@@ -25,8 +25,20 @@ import EventKit
 
 class CalendarPollingController {
     
+    private struct PendingEvent {
+        let key: String
+        let title: String
+        let time: String
+        let location: String?
+    }
+    
+    private var pendingEvents: [PendingEvent] = []
+    private var pendingKeys = Set<String>() // to prevent duplicates in the queue-up system
+    
     //Variables
     @AppStorage("Frequency") private var frequency:Double = 60
+    
+    private var notifiedEventKeys = Set<String>()
     
     let eventStore = EKEventStore()
     var timer: Timer?
@@ -41,7 +53,7 @@ class CalendarPollingController {
         
         return "\(startString) - \(endString)"
     }
-
+    
     
     func findCalendar(named name: String) -> EKCalendar? {
         // 1. Get every calendar that stores events
@@ -53,7 +65,18 @@ class CalendarPollingController {
     
     func hidePanel() {
         panel?.orderOut(nil)
+        panel = nil
         print("Panel hidden")
+    }
+    
+    private func key(for event: EKEvent) -> String? {
+        guard let id = event.eventIdentifier else { return nil }
+        
+        if let occurrence = event.occurrenceDate ?? event.startDate {
+            return "\(id)#\(occurrence.timeIntervalSince1970)"
+        } else {
+            return id
+        }
     }
     
     func showPanel(title: String?, eventTime: String?, location:String?) {
@@ -63,10 +86,13 @@ class CalendarPollingController {
             NSApp.activate(ignoringOtherApps: true)
             return
         } else {
-            let overlayView = DinnerOverlayView(onDismiss: {[weak self] in self?.hidePanel()},
-                                  title: title ?? "No title specified",
-                                  timeRangeText: eventTime ?? "No time specified",
-                                  place: location ?? "No location specified")
+            let overlayView = DinnerOverlayView(onDismiss: { [weak self] in
+                self?.hidePanel()
+                self?.presentingNextEvent()
+            },
+                                                title: title ?? "No title specified",
+                                                timeRangeText: eventTime ?? "No time specified",
+                                                place: location ?? "No location specified")
             
             let hostingView = NSHostingView<DinnerOverlayView>(rootView: overlayView)
             
@@ -74,15 +100,15 @@ class CalendarPollingController {
             //let panelHeight: CGFloat = 300
             
             if let screenSize = NSScreen.main?.frame {
-               // let x = screenSize.origin.x + (screenSize.width - panelWidth) / 2
+                // let x = screenSize.origin.x + (screenSize.width - panelWidth) / 2
                 //let y = screenSize.origin.y + (screenSize.height - panelWidth) / 2
                 
                 let contentRect = screenSize
                 
                 let Nspanel = NSPanel(contentRect: contentRect,
-                        styleMask: .borderless,
-                        backing: .buffered,
-                        defer: false)
+                                      styleMask: .borderless,
+                                      backing: .buffered,
+                                      defer: false)
                 
                 Nspanel.isOpaque = false
                 Nspanel.hasShadow = false
@@ -106,6 +132,49 @@ class CalendarPollingController {
         }
     }
     
+    private func queueIt(event: EKEvent) {
+        guard let key = key(for: event) else {
+            print("WARNING: No identifier found. Skipping this event.")
+            return
+        }
+        
+        if notifiedEventKeys.contains(key) {
+            print("Already notified, skipping")
+            return
+        }
+        
+        if pendingKeys.contains(key) {
+            print("Already queued, skipping")
+            return
+        }
+        
+        let eventTime = formatTimeRange(start: event.startDate, end: event.endDate)
+        let pending = PendingEvent(
+            key: key,
+            title: event.title ?? "No title",
+            time: eventTime,
+            location: event.location ?? "No location"
+        )
+        
+        pendingEvents.append(pending)
+        pendingKeys.insert(key)
+        print("Now queued event: \(pending.title)")
+    }
+    
+    private func presentingNextEvent() {
+        if panel != nil {return}
+        
+        guard !pendingEvents.isEmpty else { return }
+        let next = pendingEvents.removeFirst()
+        pendingKeys.remove(next.key)
+        
+        DispatchQueue.main.async {
+            self.showPanel(title: next.title, eventTime: next.time, location: next.location)
+        }
+        
+        notifiedEventKeys.insert(next.key)
+    }
+    
     func pollNow() {
         let now = Date()
         let start = now - 86400
@@ -122,15 +191,24 @@ class CalendarPollingController {
             
             for event in events {
                 if event.startDate <= now && event.endDate > now {
-                    print("Event found and matching... \(event.title ?? "No title")")
-                    let eventTime = formatTimeRange(start: event.startDate, end: event.endDate)
-                    DispatchQueue.main.async {
-                        self.showPanel(title: event.title, eventTime: eventTime, location: event.location)
-                    }
+                    queueIt(event: event)
                 } else {
                     print("Event not matching... \(event.title ?? "No title")")
                 }
             }
+            
+            presentingNextEvent()
+            
+            //Cleaning up lists
+            var stillRelevant = Set<String>()
+            for event in events {
+                if event.endDate > now, let key = key(for: event) {
+                    stillRelevant.insert(key)
+                }
+            }
+            // Keep only what’s still relevant
+            notifiedEventKeys = notifiedEventKeys.intersection(stillRelevant)
+            
             
         }
     }
