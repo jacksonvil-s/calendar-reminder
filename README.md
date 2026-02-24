@@ -5,6 +5,9 @@ A utility to remind you when a calendar event is coming up.
 
 This project was oringinally inspired by a few other paid apps. I decided to make my own version of it. Obviously this app lacks a lot of polish but overtime I will try to make it as customisable and polished as possible. This app may never reach the quality of the paid apps, but one day it might, with your contributions on finding issues and improving upon them!
 
+# Requirements
+Minimum operating version macOS 15 or above
+
 # How to use
 First, create a calendar in your calendar app named Calendar Reminder exactly - note the space and the capitals. Create events using this calendar. Then, when the time comes, the app will automatically notify you with an onscreen popup.
 
