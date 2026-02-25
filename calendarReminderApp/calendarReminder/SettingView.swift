@@ -24,7 +24,14 @@ struct SettingView: View {
     @AppStorage("Frequency") private var frequency:Double = 60.0
     @AppStorage("MenuBarIcon") private var menuBarIcon:String = "calendar.badge"
     
-    @State private var showQuitConfirmation = false
+    @AppStorage("OnboardingComplete") private var onboardingComplete:Bool = false
+    
+    @AppStorage("SUAutomaticallyUpdate") private var autoUpdate:Bool = false
+    @AppStorage("SUEnableAutomaticChecks") private var autoCheck:Bool = true
+    
+    @Environment(\.openWindow) var openWindow
+    
+    @State private var showQuitConfirmation:Bool = false
     
     var body: some View {
         
@@ -62,10 +69,22 @@ struct SettingView: View {
             
             Tab ("Updates", systemImage: "arrow.trianglehead.2.clockwise.rotate.90") {
                 Form {
-                    Section (header: Text("Keep the app on the latest version"), footer: Text("Updates are powered by Sparkle")) {
+                    Section (header: Text("Update the app"), footer: Text("Updates are powered by Sparkle.")) {
                         Button("Check for updates...") {
                             updatorController.checkForUpdates(nil)
                         }
+                    }
+                    
+                    Section (header: Text("Update preferences"), footer: Text("Auto install need to be enabled alongside auto check to work.")) {
+                        
+                        Toggle(isOn: $autoCheck) {
+                            Label("Automatically check for updates", systemImage: "square.and.arrow.down.badge.clock.fill")
+                        }
+                        
+                        Toggle(isOn: $autoUpdate) {
+                            Label("Automatically install updates", systemImage: "square.and.arrow.down.badge.checkmark.fill")
+                        }
+                        
                     }
                 }
             }
@@ -88,15 +107,15 @@ struct SettingView: View {
                     
                     Section(header:Text("Timer")) {
                         Picker("Calendar checking frequency", selection: $frequency) {
-                            Text("I recommend 60 seconds. \nAnything over 90 seconds may mean you miss a meeting.")
+                            Text("Having a lower amount means less CPU usage, while having a higher amount means more CPU usage.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .disabled(true)
                             Divider()
-                            Text("Short (30 sec)").tag(30.0)
-                            Text("Medium (60 sec)").tag(60.0)
-                            Text("Long (90 sec)").tag(90.0)
-                            Text("Ultra-long (120 sec)").tag(120.0)
+                            Text("Short (30 sec) - More CPU usage").tag(30.0)
+                            Text("Medium (60 sec) - Balanced CPU usage").tag(60.0)
+                            Text("Long (90 sec) - Less CPU usage").tag(90.0)
+                            Text("Ultra-long (120 sec) - Minimal CPU usage").tag(120.0)
                         }
                     }
                     
@@ -124,7 +143,7 @@ struct SettingView: View {
                         
                         LabeledContent("App version", value: "v\(Bundle.main.appVersion)")
                         LabeledContent("Build number", value: "Build \(Bundle.main.buildNumber) (universal x64/arm64)")
-                        LabeledContent("Settings version", value: "v1.2")
+                        LabeledContent("Settings version", value: "v1.3")
                         
                         LabeledContent("Check out the Github repo!") {
                             Link(destination: URL(string: "https://github.com/jacksonvil-s/calendar-reminder/tree/main")!) {
@@ -140,6 +159,16 @@ struct SettingView: View {
                             }
                         }
                     }
+                    
+                    
+                    Section(header: Text("Onboarding")) {
+                        Button("Show onboarding again", systemImage: "restart.circle") {
+                            onboardingComplete = false
+                            openWindow(id: "onboarding")
+                        }
+                    }
+                    
+                    
                 }
             }
         }
@@ -157,3 +186,4 @@ struct SettingView: View {
 #Preview {
     SettingView()
 }
+

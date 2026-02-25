@@ -3,6 +3,14 @@
     <channel>
         <title>calendarReminder</title>
         <item>
+            <title>0.3.2</title>
+            <pubDate>Wed, 25 Feb 2026 21:18:04 +1100</pubDate>
+            <sparkle:version>00010</sparkle:version>
+            <sparkle:shortVersionString>0.3.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.6</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/jacksonvil-s/calendar-reminder/releases/download/v0.3.2/CalendarReminder-v0.3.2.dmg" length="3500501" type="application/octet-stream" sparkle:edSignature="j3TQjvInjFVjC4l2EIwJunsT84Qm1g0KKAJI8giEHJ1be0Fb7196MkCc74p8yiTHHXMUklhYs3TAcKEPN9UdDw=="/>
+        </item>
+        <item>
             <title>0.3.1</title>
             <pubDate>Tue, 24 Feb 2026 21:18:07 +1100</pubDate>
             <sparkle:version>00009</sparkle:version>

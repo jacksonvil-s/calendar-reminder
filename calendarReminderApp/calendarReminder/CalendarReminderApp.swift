@@ -23,6 +23,8 @@ import Sparkle
 struct calendarReminderApp: App {
     @NSApplicationDelegateAdaptor(StatusItemController.self) var appDelegate: StatusItemController
     
+    @AppStorage("OnboardingComplete") var onboardingComplete:Bool = false
+    
     private let updatorController: SPUStandardUpdaterController
     
     init() {
@@ -38,6 +40,18 @@ struct calendarReminderApp: App {
     }
     
     var body: some Scene {
+        
+        WindowGroup (id: "onboarding") {
+            if onboardingComplete == false {
+                    OnboardView()
+            } else {
+                EmptyView()
+            }
+        }
+        .windowStyle(.hiddenTitleBar)
+        
+        
+        
         Settings {
             SettingView()
         }
