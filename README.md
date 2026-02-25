@@ -55,8 +55,10 @@ This version does not have properly functioning updater. In this case, please do
 # Features planned for the future
 - ~~Customisation of menu bar icon~~ Done!
 - ~~Calendar events will only remind you once per session~~ Done!
+- ~~Onboarding~~ Done!
 - Better UI
 - Optimisation of scripts
+- Uploading onto Homebrew as cask
 - More coming soon when I have the idea...
 
 These features will come over the following weeks. Big releases will come over weekends. Please stayed tuned.
