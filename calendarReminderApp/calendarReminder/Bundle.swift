@@ -19,10 +19,16 @@
 // limitations under the License.
 
 import Foundation
-
-let osVer = ProcessInfo.processInfo.operatingSystemVersion
+import SwiftUI
+import AVFoundation
 
 extension Bundle {
+    static var osVer: OperatingSystemVersion {
+        ProcessInfo.processInfo.operatingSystemVersion
+    }
+    
+    //Accessible variables
+    
     var appVersion: String {
         infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     }
@@ -32,10 +38,21 @@ extension Bundle {
     }
     
     var OSver: String {
-        "\(osVer.majorVersion).\(osVer.minorVersion).\(osVer.patchVersion)"
+        "\(Bundle.osVer.majorVersion).\(Bundle.osVer.minorVersion).\(Bundle.osVer.patchVersion)"
     }
     
     var fullVersion: String {
         "v\(appVersion) (\(buildNumber))"
     }
+    
+    //Accessible functions
+    
+    func playAudio(soundName: String) {
+        if UserDefaults.standard.bool(forKey: "EnableSound") {
+            AudioPlayerManager.shared.playWAV(named: soundName, in: .main)
+        } else {
+            print("Sounds disabled.")
+        }
+    }
 }
+

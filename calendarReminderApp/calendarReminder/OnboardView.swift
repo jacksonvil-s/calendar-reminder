@@ -32,12 +32,14 @@ struct OnboardView: View {
     enum OnboardingStage: CaseIterable {
         case welcome
         case permissions
+        case tutorial
         case final
 
         var buttonText: String {
             switch self {
             case .welcome: return "Next"
-            case .permissions: return "Next"
+            case .permissions: return "Permissions ready!"
+            case .tutorial: return "I'm all set up!"
             case .final: return "Get started"
             }
         }
@@ -45,7 +47,8 @@ struct OnboardView: View {
         var nextStage: OnboardingStage? {
             switch self {
             case .welcome: return .permissions
-            case .permissions: return .final
+            case .permissions: return .tutorial
+            case .tutorial: return .final
             case .final: return nil
             }
         }
@@ -64,6 +67,8 @@ struct OnboardView: View {
                 WelcomeContentView()
             case .permissions:
                 PermissionsContentView(isCalendarAccessGranted: $isCalendarAccessGranted)
+            case .tutorial:
+                TutorialContentView()
             case .final:
                 FinalContentView()
             }
@@ -81,6 +86,11 @@ struct OnboardView: View {
             .disabled(currentStage == .permissions && !isCalendarAccessGranted)
         }
         .padding()
+        .background(WindowAccessor { window in
+            window.standardWindowButton(.closeButton)?.isHidden = true
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
+        })
     }
 
     private func handleNextButton() {
@@ -97,8 +107,29 @@ struct OnboardView: View {
     }
 }
 
+struct WindowAccessor: NSViewRepresentable {
+    var onWindowReceived: (NSWindow) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            if let window = view.window {
+                onWindowReceived(window)
+            }
+        }
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        if let window = nsView.window {
+            onWindowReceived(window)
+        }
+    }
+}
+
 
 struct WelcomeContentView: View {
+    
     var body: some View {
         VStack {
             Image(systemName: "calendar.badge.plus")
@@ -121,6 +152,9 @@ struct WelcomeContentView: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 30)
                 .padding(.bottom, 30)
+        }
+        .onAppear {
+            Bundle.main.playAudio(soundName: "notify")
         }
     }
 }
@@ -205,11 +239,50 @@ struct PermissionsContentView: View {
     }
 }
 
+
+struct TutorialContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "book.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+                .foregroundColor(.accentColor)
+                .padding(.bottom, 5)
+
+            Text("Tutorial")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+
+            Text("Let's get you setup and ready to go!")
+                .font(.title3)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 10)
+            
+            Image("TuStep1")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 700)
+                .clipped()
+            
+            Text("Step 1: Open the calendar app \nStep 2: go to menu bar > file > New Calendar \nStep 3: Name your new Calendar EXACTLY 'Calendar Reminder', with the capital letters and the space exact. \nStep 4: Create events using this calendar, and you'll get reminded!")
+                .font(.footnote)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.foreground)
+                .padding(10)
+            
+        }
+    }
+}
+
 struct FinalContentView: View {
     
     @AppStorage("SUEnableAutomaticChecks") private var autoCheck:Bool = true
-    @AppStorage("BackgroundColour") private var backgroundColour:String = "white"
-    @AppStorage("MenuBarIcon") private var menuBarIcon:String = "calendar.badge"
     
     var body: some View {
         
@@ -244,31 +317,6 @@ struct FinalContentView: View {
                 Toggle(isOn: $autoCheck) {
                     Label("Automatically check for updates", systemImage: "square.and.arrow.down.badge.clock.fill")
                 }
-                
-                Picker("Background colour", selection: $backgroundColour) {
-                    Text("White").tag("white")
-                    Text("Grey").tag("grey")
-                    Text("Black").tag("black")
-                    Text("Red").tag("red")
-                    Text("Orange").tag("orange")
-                    Text("Yellow").tag("yellow")
-                    Text("Green").tag("green")
-                    Text("Blue").tag("blue")
-                    Text("Purple").tag("purple")
-                }
-                
-                Picker("Menu bar icon", selection: $menuBarIcon) {
-                    Text("Changes here require an app restart.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .disabled(true)
-                    Divider()
-                    Label("Calendar with badge (default)", systemImage: "calendar.badge").tag("calendar.badge")
-                    Label("Calendar in circle", systemImage: "calendar.circle").tag("calendar.circle")
-                    Label("Calendar with exclaimation mark", systemImage: "calendar.badge.exclamationmark").tag("calendar.badge.exclamationmark")
-                    Label("Calendar with clock", systemImage: "calendar.badge.clock").tag("calendar.badge.clock")
-                    Label("Timeline", systemImage: "calendar.day.timeline.right").tag("calendar.day.timeline.right")
-                }
             }
             .minimumScaleFactor(1.1)
             .frame(height: 250)
@@ -284,5 +332,6 @@ struct FinalContentView: View {
     // Note: If you have a custom initializer, you might need to adjust the preview.
     // For this example, OnboardView still has its default initializer and the new state
     // variable is private, so it won't affect the preview initializer directly.
-    OnboardView(onboardingComplete: false)
+    OnboardView()
 }
+

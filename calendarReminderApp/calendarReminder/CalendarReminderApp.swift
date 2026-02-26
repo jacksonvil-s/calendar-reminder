@@ -51,7 +51,6 @@ struct calendarReminderApp: App {
         .windowStyle(.hiddenTitleBar)
         
         
-        
         Settings {
             SettingView()
         }

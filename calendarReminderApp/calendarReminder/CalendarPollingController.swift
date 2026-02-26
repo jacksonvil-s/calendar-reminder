@@ -37,6 +37,7 @@ class CalendarPollingController {
     
     //Variables
     @AppStorage("Frequency") private var frequency:Double = 60
+    @AppStorage("EnableSound") private var enableSound:Bool = true
     
     private var notifiedEventKeys = Set<String>()
     
@@ -87,6 +88,7 @@ class CalendarPollingController {
             return
         } else {
             let overlayView = DinnerOverlayView(onDismiss: { [weak self] in
+                Bundle.main.playAudio(soundName: "dismiss")
                 self?.hidePanel()
                 self?.presentingNextEvent()
             },
@@ -126,6 +128,8 @@ class CalendarPollingController {
                 
                 self.panel = Nspanel
                 print("Panel created")
+                
+                Bundle.main.playAudio(soundName: "notify")
             } else {
                 print("ERROR: Could not get screen size")
             }
@@ -252,11 +256,15 @@ class CalendarPollingController {
             if granted {
                 print ("Successfully granted permission. Now loading up timer..")
                 
+                Bundle.main.playAudio(soundName: "success")
+                
                 DispatchQueue.main.async {
                     self.startPolling()
                 }
             } else {
                 print ("Permission failed. Please try again.")
+                
+                Bundle.main.playAudio(soundName: "failure")
             }
         }
     }

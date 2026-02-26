@@ -33,6 +33,7 @@ struct SettingView: View {
     
     @State private var showQuitConfirmation:Bool = false
     
+
     var body: some View {
         
         TabView {
@@ -75,16 +76,22 @@ struct SettingView: View {
                         }
                     }
                     
-                    Section (header: Text("Update preferences"), footer: Text("Auto install need to be enabled alongside auto check to work.")) {
+                    Section (header: Text("Update preferences"), footer: Text("When auto install is enabled, auto check will be enabled alongside.")) {
                         
                         Toggle(isOn: $autoCheck) {
                             Label("Automatically check for updates", systemImage: "square.and.arrow.down.badge.clock.fill")
                         }
+                        .disabled(autoUpdate)
                         
                         Toggle(isOn: $autoUpdate) {
                             Label("Automatically install updates", systemImage: "square.and.arrow.down.badge.checkmark.fill")
                         }
                         
+                    }
+                    .onChange(of: autoUpdate) {
+                        if autoUpdate == true {
+                            autoCheck = true
+                        }
                     }
                 }
             }
