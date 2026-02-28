@@ -39,7 +39,7 @@ struct SettingView: View {
         TabView {
             Tab("General", systemImage: "gear" ) {
                 Form {
-                    Section (header: Text("General")) {
+                    Section (header: Text("General"), footer: Text("Animations forced to on. This restriction will be lifted in a future version.")) {
                         LaunchAtLogin.Toggle()
                         Toggle(isOn: $soundSetting) {
                             Label("Sounds", systemImage:"speaker.wave.2.fill")
@@ -47,6 +47,7 @@ struct SettingView: View {
                         Toggle(isOn: $animationSetting) {
                             Label("Animations and Effects", systemImage: "sensor.radiowaves.left.and.right.fill")
                         }
+                        .disabled(true)
                     }
                     
                     Section (header: Text("App control")) {
@@ -110,6 +111,8 @@ struct SettingView: View {
                             Text("Blue").tag("blue")
                             Text("Purple").tag("purple")
                         }
+                        
+                        LabeledContent("Snooze duration", value: "Feature coming soon...")
                     }
                     
                     Section(header:Text("Timer")) {

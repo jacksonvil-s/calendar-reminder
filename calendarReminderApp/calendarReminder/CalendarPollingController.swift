@@ -65,9 +65,19 @@ class CalendarPollingController {
     }
     
     func hidePanel() {
-        panel?.orderOut(nil)
-        panel = nil
-        print("Panel hidden")
+        panel?.ignoresMouseEvents = true
+        if let panel = panel {
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.5
+                panel.animator().alphaValue = 0.0
+            }, completionHandler: { [weak self] in
+                panel.orderOut(nil)
+                self?.panel = nil
+                print("Panel hidden")
+            })
+        } else {
+            print("Panel hidden")
+        }
     }
     
     private func key(for event: EKEvent) -> String? {
@@ -90,7 +100,18 @@ class CalendarPollingController {
             let overlayView = DinnerOverlayView(onDismiss: { [weak self] in
                 Bundle.main.playAudio(soundName: "dismiss")
                 self?.hidePanel()
-                self?.presentingNextEvent()
+                Task {
+                    try await Task.sleep(for: .seconds(2))
+                    self?.presentingNextEvent()
+                }
+            },
+                                                onSnooze: {
+                print("Snoozed")
+                self.hidePanel()
+                Task {
+                    try await Task.sleep(for: .seconds(2))
+                    self.presentingNextEvent()
+                }
             },
                                                 title: title ?? "No title specified",
                                                 timeRangeText: eventTime ?? "No time specified",
@@ -116,14 +137,25 @@ class CalendarPollingController {
                 Nspanel.hasShadow = false
                 Nspanel.backgroundColor = .clear
                 Nspanel.level = .screenSaver
-                Nspanel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+                Nspanel.collectionBehavior = [
+                    .canJoinAllSpaces,
+                    .fullScreenAuxiliary,
+                    .stationary
+                ]
+                Nspanel.hidesOnDeactivate = false
                 Nspanel.ignoresMouseEvents = false
                 Nspanel.isMovable = false
                 
                 
                 Nspanel.contentView = hostingView
+                Nspanel.setFrame(contentRect, display: true)
+                Nspanel.alphaValue = 0.0
                 Nspanel.makeKeyAndOrderFront(nil)
                 Nspanel.orderFrontRegardless()
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = 1.5
+                    Nspanel.animator().alphaValue = 1.0
+                }
                 NSApp.activate(ignoringOtherApps: true)
                 
                 self.panel = Nspanel
@@ -166,9 +198,17 @@ class CalendarPollingController {
     }
     
     private func presentingNextEvent() {
-        if panel != nil {return}
         
-        guard !pendingEvents.isEmpty else { return }
+        if panel != nil {
+            print("ERROR: Panel exists! Exiting to prevent reappearing. This is an issue that requires attention. \nATTENTION NEEDED!")
+            return
+        }
+        
+        guard !pendingEvents.isEmpty else {
+            print("No more events. Exiting.")
+            return
+        }
+        
         let next = pendingEvents.removeFirst()
         pendingKeys.remove(next.key)
         
@@ -255,16 +295,11 @@ class CalendarPollingController {
             
             if granted {
                 print ("Successfully granted permission. Now loading up timer..")
-                
-                Bundle.main.playAudio(soundName: "success")
-                
                 DispatchQueue.main.async {
                     self.startPolling()
                 }
             } else {
                 print ("Permission failed. Please try again.")
-                
-                Bundle.main.playAudio(soundName: "failure")
             }
         }
     }
@@ -276,3 +311,4 @@ class CalendarPollingController {
     }
     
 }
+

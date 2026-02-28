@@ -164,17 +164,21 @@ struct PermissionsContentView: View {
     @Binding var isCalendarAccessGranted: Bool
     
     @State var calendarAccessAttempts: Int = 0
+    @State var relaunchNeeded:Bool = false
     
     let eventStore = EKEventStore()
     
     var body: some View {
         VStack {
-            Image(systemName: "hand.raised.app.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 120, height: 120)
-                .foregroundColor(.accentColor)
-                .padding(.bottom, 10)
+            
+            if calendarAccessAttempts < 2 {
+                Image(systemName: "hand.raised.app.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .foregroundColor(.accentColor)
+                    .padding(.bottom, 10)
+            }
 
             Text("Give calendar permissions")
                 .font(.largeTitle)
@@ -202,17 +206,27 @@ struct PermissionsContentView: View {
                     
                     DispatchQueue.main.async {
                         if granted {
-                            print("Access granted.")
-                            self.isCalendarAccessGranted = true
+                            if calendarAccessAttempts < 2 {
+                                print("Access granted.")
+                                Bundle.main.playAudio(soundName: "success")
+                                self.isCalendarAccessGranted = true
+                            } else {
+                                self.isCalendarAccessGranted = false
+                                print("Relaunch needed")
+                                relaunchNeeded = true
+                                Bundle.main.playAudio(soundName: "failure")
+                            }
                         }
                         else {
                             print("Access denied.")
                             
                             if calendarAccessAttempts < 2 {
                                 self.isCalendarAccessGranted = false
+                                Bundle.main.playAudio(soundName: "failure")
                                 calendarAccessAttempts += 1
                             } else {
-                                self.isCalendarAccessGranted = true
+                                Bundle.main.playAudio(soundName: "failure")
+                                self.isCalendarAccessGranted = false
                             }
                             
                         }
@@ -224,13 +238,56 @@ struct PermissionsContentView: View {
                 .tint(.green)
                 .padding(.top, 10)
             
-            if isCalendarAccessGranted {
-                Text("Calendar access granted!")
+            if calendarAccessAttempts >= 2 {
+                VStack {
+                    Text("Try these troubleshooting steps:")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.red)
+                    HStack {
+                        Image("TrStep1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity)
+                            .clipped()
+                        
+                        Image("TrStep2")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity)
+                            .clipped()
+                    }
+                    .padding(5)
+                    
+                    Text("Step 1: Go to system settings, privacy and secuirty, then calendar access. \nStep 2: Check the box next to CalendarReminder. \nStep 3: Use the settings dialog or use the button below to quit and relaunch the app. \nNote: Check if calendar reminder has FULL calendar access.")
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.foreground)
+                    
+                    Button("Quit app") {
+                        NSApp.terminate(nil)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                }
+            }
+            
+            if relaunchNeeded {
+                Text("Please relaunch the app to ensure the core logic works by using the button above.")
                     .font(.caption)
-                    .foregroundColor(.green)
+                    .foregroundColor(.yellow)
                     .padding(.top, 5)
+            }
+            
+            if isCalendarAccessGranted {
+                if calendarAccessAttempts < 2 {
+                    Text("Calendar access granted!")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                        .padding(.top, 5)
+                }
             } else {
-                Text("Please grant calendar access to continue. If you are having trouble try clicking the access button again, and you can troubleshoot later.")
+                Text("Please grant calendar access to continue. Try to check permissions again.")
                     .font(.caption)
                     .foregroundColor(.red)
                     .padding(.top, 5)
