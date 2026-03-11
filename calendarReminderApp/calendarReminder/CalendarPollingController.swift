@@ -32,14 +32,27 @@ class CalendarPollingController {
         let location: String?
     }
     
+    private struct SnoozedEvent {
+        let key: String
+        let title: String
+        let time: String
+        let location: String?
+        let wakeTime: Date
+    }
+    
+    private var snoozedEvents: [SnoozedEvent] = []
     private var pendingEvents: [PendingEvent] = []
-    private var pendingKeys = Set<String>() // to prevent duplicates in the queue-up system
+    
+    private var lastPresented: PendingEvent?
     
     //Variables
+    @AppStorage("SnoozeDuration") private var snoozeMinutes: Int = 10
     @AppStorage("Frequency") private var frequency:Double = 60
     @AppStorage("EnableSound") private var enableSound:Bool = true
     
+    
     private var notifiedEventKeys = Set<String>()
+    private var pendingKeys = Set<String>()
     
     let eventStore = EKEventStore()
     var timer: Timer?
@@ -47,7 +60,7 @@ class CalendarPollingController {
     
     func formatTimeRange(start: Date, end: Date) -> String {
         let formatter = DateFormatter()
-        formatter.timeStyle = .short // This gives you "6:00 PM" format based on user locale
+        formatter.timeStyle = .short
         
         let startString = formatter.string(from: start)
         let endString = formatter.string(from: end)
@@ -105,13 +118,23 @@ class CalendarPollingController {
                     self?.presentingNextEvent()
                 }
             },
-                                                onSnooze: {
-                print("Snoozed")
-                self.hidePanel()
-                Task {
-                    try await Task.sleep(for: .seconds(2))
-                    self.presentingNextEvent()
-                }
+                onSnooze: { [weak self] in
+                    guard let self = self else { return }
+                    print("Snoozed")
+
+                    if let last = self.lastPresented {
+                        let wake = Date().addingTimeInterval(TimeInterval(self.snoozeMinutes * 60))
+                        let snoozed = SnoozedEvent(key: last.key, title: last.title, time: last.time, location: last.location, wakeTime: wake)
+                        self.snoozedEvents.append(snoozed)
+
+                        self.notifiedEventKeys.remove(last.key)
+                    }
+
+                    self.hidePanel()
+                    Task {
+                        try await Task.sleep(for: .seconds(2))
+                        self.presentingNextEvent()
+                    }
             },
                                                 title: title ?? "No title specified",
                                                 timeRangeText: eventTime ?? "No time specified",
@@ -168,9 +191,36 @@ class CalendarPollingController {
         }
     }
     
+    private func wakeSnoozedIfNeeded(now: Date = Date()) {
+        guard !snoozedEvents.isEmpty else { return }
+        var ready: [SnoozedEvent] = []
+        var notReady: [SnoozedEvent] = []
+        for item in snoozedEvents {
+            if item.wakeTime <= now {
+                ready.append(item)
+            } else {
+                notReady.append(item)
+            }
+        }
+        snoozedEvents = notReady
+        for item in ready {
+            if !pendingKeys.contains(item.key) {
+                let pending = PendingEvent(key: item.key, title: item.title, time: item.time, location: item.location)
+                notifiedEventKeys.remove(item.key)
+                pendingEvents.append(pending)
+                pendingKeys.insert(item.key)
+            }
+        }
+    }
+    
     private func queueIt(event: EKEvent) {
         guard let key = key(for: event) else {
             print("WARNING: No identifier found. Skipping this event.")
+            return
+        }
+        
+        if snoozedEvents.contains(where: { $0.key == key }) {
+            print("Currently snoozing.")
             return
         }
         
@@ -211,6 +261,7 @@ class CalendarPollingController {
         
         let next = pendingEvents.removeFirst()
         pendingKeys.remove(next.key)
+        lastPresented = next
         
         DispatchQueue.main.async {
             self.showPanel(title: next.title, eventTime: next.time, location: next.location)
@@ -221,6 +272,7 @@ class CalendarPollingController {
     
     func pollNow() {
         let now = Date()
+        wakeSnoozedIfNeeded(now: now)
         let start = now - 86400
         let end = now + 86400
         

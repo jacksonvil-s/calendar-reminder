@@ -285,7 +285,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00012;
+				CURRENT_PROJECT_VERSION = 00013;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = YES;
@@ -316,7 +316,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 0.3.4;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonvil.calendarReminder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -345,7 +345,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00012;
+				CURRENT_PROJECT_VERSION = 00013;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = YES;
@@ -376,7 +376,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 0.3.4;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonvil.calendarReminder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

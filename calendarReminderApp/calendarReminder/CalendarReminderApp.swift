@@ -41,15 +41,15 @@ struct calendarReminderApp: App {
     
     var body: some Scene {
         
-        WindowGroup (id: "onboarding") {
-            if onboardingComplete == false {
-                    OnboardView()
+        WindowGroup (id: "onboarding"){
+            
+            if onboardingComplete {
+                BlankView()
             } else {
-                EmptyView()
+                OnboardView()
             }
         }
         .windowStyle(.hiddenTitleBar)
-        
         
         Settings {
             SettingView()

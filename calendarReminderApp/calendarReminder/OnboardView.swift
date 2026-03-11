@@ -379,6 +379,7 @@ struct FinalContentView: View {
             .frame(height: 250)
             
         }
+        .frame(minWidth: 50)
         .toggleStyle(.switch)
         .formStyle(.grouped)
     }

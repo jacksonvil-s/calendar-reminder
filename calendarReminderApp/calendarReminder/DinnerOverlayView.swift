@@ -118,7 +118,7 @@ struct DinnerOverlayView: View {
                     Button(action: {
                         animatedDismiss(onSnooze)
                     }) {
-                        Label("Snooze for \(snoozeDuration) minutes (coming soon...)", systemImage: "alarm.waves.left.and.right")
+                        Label("Snooze for \(snoozeDuration) minutes", systemImage: "alarm.waves.left.and.right")
                             .font(.headline)
                             .foregroundStyle(.black)
                             .frame(maxWidth: .infinity)
@@ -130,7 +130,10 @@ struct DinnerOverlayView: View {
                             )
                     }
                     .buttonStyle(.plain)
-                    .disabled(true)
+                    
+                    Text("You can configure this window in settings!")
+                        .font(.caption)
+                        .foregroundStyle(foregroundStyleColor)
                     
                 }
                 

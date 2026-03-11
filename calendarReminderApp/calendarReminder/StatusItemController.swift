@@ -30,8 +30,8 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
     private var settingsWC: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification:Notification) {
-        //Originally init; creating status items in menu bar
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        
         item.button?.image = NSImage(systemSymbolName: menuBarIcon, accessibilityDescription: "Calendar Reminder menu bar icon")
         item.menu = buildMenu()
         self.statusItem = item
