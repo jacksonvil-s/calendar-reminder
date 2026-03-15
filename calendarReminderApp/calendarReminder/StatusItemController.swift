@@ -32,7 +32,42 @@ final class StatusItemController: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification:Notification) {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
-        item.button?.image = NSImage(systemSymbolName: menuBarIcon, accessibilityDescription: "Calendar Reminder menu bar icon")
+        if let button = item.button {
+            // Try to load the configured SF Symbol; fall back for macOS 15 if unavailable
+            let resolvedName: String = {
+                if #available(macOS 26, *) {
+                    // On macOS 26 and newer, respect the user's chosen symbol directly
+                    return menuBarIcon
+                } else {
+                    // Whitelist of conservative symbols likely available on older macOS
+                    let allowed: Set<String> = ["calendar", "calendar.circle", "calendar.badge.plus"]
+                    if allowed.contains(menuBarIcon) {
+                        return menuBarIcon
+                    } else {
+                        return "calendar"
+                    }
+                }
+            }()
+            
+            if let symbol = NSImage(systemSymbolName: resolvedName, accessibilityDescription: "Calendar Reminder menu bar icon") {
+                symbol.isTemplate = true
+                button.image = symbol
+            } else {
+                if let sfFallback = NSImage(systemSymbolName: "calendar", accessibilityDescription: "Calendar icon") {
+                    sfFallback.isTemplate = true
+                    button.image = sfFallback
+                } else {
+                    let appKitFallback = NSImage(named: NSImage.preferencesGeneralName)
+                    appKitFallback?.isTemplate = true
+                    button.image = appKitFallback
+                }
+            }
+            
+            if let img = button.image {
+                img.size = NSSize(width: 18, height: 18)
+            }
+        }
+        
         item.menu = buildMenu()
         self.statusItem = item
         

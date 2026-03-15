@@ -26,6 +26,8 @@ struct DinnerOverlayView: View {
     @AppStorage("EnableSound") private var soundOn:Bool = true
     @AppStorage("EnableAnimation") private var animationOn:Bool = true
     @AppStorage("SnoozeDuration") private var snoozeDuration:Int = 10
+    
+    @AppStorage("GameComplete") private var gameComplete:Bool = false
 
     @State private var showCard: Bool = false
     @State private var dimOpacity: Double = 0.0
@@ -94,6 +96,13 @@ struct DinnerOverlayView: View {
                         .foregroundStyle(foregroundStyleColor.opacity(0.9))
                         .lineLimit(2)
                         .minimumScaleFactor(0.8)
+                    
+                    ZStack {
+                        InteractiveView()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 250)
+                    
                 }
                 
                 VStack(spacing: 12) {
@@ -112,6 +121,7 @@ struct DinnerOverlayView: View {
                                     .fill(Color.green)
                             )
                     }
+                    .disabled(!gameComplete)
                     .buttonStyle(.plain)
 
                     // Snooze (Yellow)
