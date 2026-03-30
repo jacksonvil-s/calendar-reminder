@@ -22,6 +22,7 @@
 import SwiftUI
 import AppKit
 import EventKit
+import DynamicNotchKit
 
 class CalendarPollingController {
     
@@ -286,8 +287,46 @@ class CalendarPollingController {
             print("Found calendar named Calendar Reminder")
             
             for event in events {
-                if event.startDate <= now && event.endDate > now {
+                
+                let oneMinNotch = DynamicNotchInfo(
+                    icon: .init(systemName: "1.brakesignal"),
+                    title: "Your event '\(event.title ?? "No title")' will start in less than 1 minute.",
+                    description: "Location: \(event.location ?? "No location")",
+                    style: .notch
+                )
+                
+                let fiveMinNotch = DynamicNotchInfo(
+                    icon: .init(systemName: "5.calendar"),
+                    title: "Your event '\(event.title ?? "No title")' will start in less than 5 minutes.",
+                    description: "Location: \(event.location ?? "No location")",
+                    style: .notch
+                )
+                
+                
+                let timeUntilStart = event.startDate.timeIntervalSince(now)
+                if (event.startDate <= now && event.endDate > now) || (timeUntilStart > 0 && timeUntilStart <= 30) {
+                    print("Event is ongoing: \(event.title ?? "No title")")
                     queueIt(event: event)
+                } else if timeUntilStart > 30 && timeUntilStart <= 60 {
+                    print("Event starting within 1 minute: \(event.title ?? "No title")")
+                    Task {
+                        await oneMinNotch.expand(on: NSScreen.main!)
+                        Task.detached {
+                            try? await Task.sleep(for: .seconds(5))
+                            await oneMinNotch.compact(on: NSScreen.main!)
+                            await oneMinNotch.hide()
+                        }
+                    }
+                } else if timeUntilStart > 60 && timeUntilStart <= 300 {
+                    print("Event starting within 5 minutes: \(event.title ?? "No title")")
+                    Task {
+                        await fiveMinNotch.expand(on: NSScreen.main!)
+                        Task.detached {
+                            try? await Task.sleep(for: .seconds(5))
+                            await fiveMinNotch.compact(on: NSScreen.main!)
+                            await fiveMinNotch.hide()
+                        }
+                    }
                 } else {
                     print("Event not matching... \(event.title ?? "No title")")
                 }
@@ -311,8 +350,6 @@ class CalendarPollingController {
     
     func startPolling() {
         print ("Starting 60s polling...")
-        self.pollNow()
-        print ("First poll success...")
         timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) {[weak self] _ in
             print("Polling...")
             self?.pollNow()

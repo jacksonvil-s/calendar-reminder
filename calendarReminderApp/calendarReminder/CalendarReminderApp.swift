@@ -18,6 +18,7 @@
 
 import SwiftUI
 import Sparkle
+import DynamicNotchKit
 
 @main
 struct calendarReminderApp: App {
@@ -26,6 +27,8 @@ struct calendarReminderApp: App {
     @AppStorage("OnboardingComplete") var onboardingComplete:Bool = false
     
     private let updatorController: SPUStandardUpdaterController
+    
+    let isTestMode = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     
     init() {
         print("Initialising...")
@@ -39,14 +42,31 @@ struct calendarReminderApp: App {
         print("Initialisation complete.")
     }
     
+    @StateObject private var myNotch = DynamicNotchInfo(
+        icon: .init(systemName: "calendar"),
+        title: "CalendarReminder successfully launched",
+        description: "It will now actively listen to events.",
+        style: .floating
+    )
+    
     var body: some Scene {
         
         WindowGroup (id: "onboarding"){
             
-            if onboardingComplete {
-                BlankView()
-            } else {
-                OnboardView()
+            Group {
+                if onboardingComplete {
+                    BlankView()
+                } else {
+                    OnboardView()
+                }
+            }
+            .task {
+                await myNotch.expand(on: NSScreen.main!)
+                Task.detached {
+                    try? await Task.sleep(for: .seconds(5))
+                    await myNotch.compact(on: NSScreen.main!)
+                    await myNotch.hide()
+                }
             }
         }
         .windowStyle(.hiddenTitleBar)
@@ -61,5 +81,8 @@ struct calendarReminderApp: App {
                 }
             }
         }
+        
+        
     }
 }
+

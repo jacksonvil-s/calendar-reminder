@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A727E492F46E30800067B4D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 1A727E482F46E30800067B4D /* Sparkle */; };
+		1A83F41E2F6A34010088EE39 /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A83F41D2F6A34010088EE39 /* DynamicNotchKit */; };
 		1AA30D5B2F482DF900703C2A /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1AA30D5A2F482DF900703C2A /* LaunchAtLogin */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A83F41E2F6A34010088EE39 /* DynamicNotchKit in Frameworks */,
 				1AA30D5B2F482DF900703C2A /* LaunchAtLogin in Frameworks */,
 				1A727E492F46E30800067B4D /* Sparkle in Frameworks */,
 			);
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				1A727E482F46E30800067B4D /* Sparkle */,
 				1AA30D5A2F482DF900703C2A /* LaunchAtLogin */,
+				1A83F41D2F6A34010088EE39 /* DynamicNotchKit */,
 			);
 			productName = calendarReminder;
 			productReference = 1A727E392F46E19B00067B4D /* calendarReminder.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				1A727E472F46E30800067B4D /* XCRemoteSwiftPackageReference "Sparkle" */,
 				1AA30D592F482DF900703C2A /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+				1A83F41C2F6A34010088EE39 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1A727E3A2F46E19B00067B4D /* Products */;
@@ -285,7 +289,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00013;
+				CURRENT_PROJECT_VERSION = 00014;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = YES;
@@ -345,7 +349,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 00013;
+				CURRENT_PROJECT_VERSION = 00014;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MADNG3WWS3;
 				ENABLE_APP_SANDBOX = YES;
@@ -427,6 +431,14 @@
 				minimumVersion = 2.8.1;
 			};
 		};
+		1A83F41C2F6A34010088EE39 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/DynamicNotchKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		1AA30D592F482DF900703C2A /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
@@ -442,6 +454,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A727E472F46E30800067B4D /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		1A83F41D2F6A34010088EE39 /* DynamicNotchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A83F41C2F6A34010088EE39 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */;
+			productName = DynamicNotchKit;
 		};
 		1AA30D5A2F482DF900703C2A /* LaunchAtLogin */ = {
 			isa = XCSwiftPackageProductDependency;
