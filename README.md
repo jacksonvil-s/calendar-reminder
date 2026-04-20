@@ -1,3 +1,4 @@
+<img src="https://img.shields.io/badge/Version-0.4.1-blue">
 <img src="/calendarReminderLogo.png" width="200">
 
 # calendar-reminder
