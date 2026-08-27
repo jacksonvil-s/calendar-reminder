@@ -1,4 +1,4 @@
-> [!imporant]
+> [!important]
 > This project is no longer maintained. You can find an alternative to using this app online. I will not endorse any specific apps.
 
 <img src="https://img.shields.io/badge/Version-0.4.1-blue">
